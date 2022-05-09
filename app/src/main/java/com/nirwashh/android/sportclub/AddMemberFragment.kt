@@ -1,19 +1,32 @@
 package com.nirwashh.android.sportclub
 
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.nirwashh.android.sportclub.data.DatabaseManager
+import com.nirwashh.android.sportclub.data.TAG
 import com.nirwashh.android.sportclub.databinding.FragmentAddMemberBinding
+import com.nirwashh.android.sportclub.model.Member
 
 class AddMemberFragment : BaseFragment() {
     private var _binding: FragmentAddMemberBinding? = null
     private val b get() = _binding!!
-    private var gender = 0
+    private var gender = ""
+    private lateinit var dbManager: DatabaseManager
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dbManager = DatabaseManager(context)
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
@@ -33,6 +46,24 @@ class AddMemberFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createSpinner()
+        b.btnSave.setOnClickListener {
+            saveMember()
+        }
+        b.btnDelete.setOnClickListener {
+            val firstName = b.edFirstName.text.toString()
+            val member = dbManager.getMember(firstName)
+            dbManager.deleteMember(member)
+        }
+
+
+    }
+
+    private fun saveMember() {
+        val firstName = b.edFirstName.text.toString()
+        val lastName = b.edLastName.text.toString()
+        val sportGroup = b.edGroup.text.toString()
+        val gender = b.spinner.selectedItem.toString()
+        dbManager.addMember(Member(firstName, lastName, gender, sportGroup))
     }
 
     private fun createSpinner() {
@@ -51,18 +82,11 @@ class AddMemberFragment : BaseFragment() {
                     position: Int,
                     id: Long
                 ) {
-                    val selectedGender = parent?.selectedItemPosition.toString()
-                    if (!TextUtils.isEmpty(selectedGender)) {
-                        gender = when (selectedGender) {
-                            "Male" -> 1
-                            "Female" -> 2
-                            else -> 0
-                        }
-                    }
+                    gender = selectedItem.toString()
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    gender = 0
+                    gender = "non"
                 }
 
             }
@@ -72,5 +96,10 @@ class AddMemberFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbManager.closeDb()
     }
 }

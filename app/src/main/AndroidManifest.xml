@@ -18,6 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.nirwashh.android.sportclub"
+            android:name=".data.ClubContentProvider"
+            android:exported="false">
+
+        </provider>
     </application>
 
 </manifest>
