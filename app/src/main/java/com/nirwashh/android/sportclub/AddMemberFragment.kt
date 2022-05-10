@@ -2,16 +2,13 @@ package com.nirwashh.android.sportclub
 
 import android.content.Context
 import android.os.Bundle
-import android.text.TextUtils
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.nirwashh.android.sportclub.data.DatabaseManager
-import com.nirwashh.android.sportclub.data.TAG
 import com.nirwashh.android.sportclub.databinding.FragmentAddMemberBinding
 import com.nirwashh.android.sportclub.model.Member
 
@@ -38,7 +35,7 @@ class AddMemberFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddMemberBinding.inflate(layoutInflater, container, false)
         return b.root
     }
@@ -63,7 +60,7 @@ class AddMemberFragment : BaseFragment() {
         val lastName = b.edLastName.text.toString()
         val sportGroup = b.edGroup.text.toString()
         val gender = b.spinner.selectedItem.toString()
-        dbManager.addMember(Member(firstName, lastName, gender, sportGroup))
+        dbManager.addMember(Member(firstName = firstName, lastName = lastName, gender = gender, sport = sportGroup))
     }
 
     private fun createSpinner() {

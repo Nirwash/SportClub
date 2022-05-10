@@ -2,7 +2,6 @@ package com.nirwashh.android.sportclub.data
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.util.Log
 import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_FIRST_NAME
 import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_GENDER
@@ -70,7 +69,7 @@ class DatabaseManager(context: Context) {
             val lastName = cursor.getString(cursor.getColumnIndexOrThrow(KEY_LAST_NAME))
             val gender = cursor.getString(cursor.getColumnIndexOrThrow(KEY_GENDER))
             val sportGroup = cursor.getString(cursor.getColumnIndexOrThrow(KEY_SPORT))
-            val member =  Member(firstName, lastName, gender, sportGroup)
+            val member =  Member(firstName = firstName, lastName = lastName, gender = gender, sport = sportGroup)
             Log.d(
                 TAG,
                 "FIND FROM LASTNAME = NAME: ${member.firstName} ${member.lastName}, GENDER: ${member.gender}, SPORT CLUB: ${member.sport}"
@@ -131,7 +130,9 @@ class DatabaseManager(context: Context) {
     fun getMembersCount(): Int {
         val db = dbHelper.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME", null)
-        return cursor.count
+        val count = cursor.count
+        cursor.close()
+        return count
     }
 
     fun closeDb() {
