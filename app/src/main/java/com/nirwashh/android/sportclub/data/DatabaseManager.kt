@@ -72,7 +72,7 @@ class DatabaseManager(context: Context) {
             val member =  Member(firstName = firstName, lastName = lastName, gender = gender, sport = sportGroup)
             Log.d(
                 TAG,
-                "FIND FROM LASTNAME = NAME: ${member.firstName} ${member.lastName}, GENDER: ${member.gender}, SPORT CLUB: ${member.sport}"
+                "FIND FROM NAME = NAME: ${member.firstName} ${member.lastName}, GENDER: ${member.gender}, SPORT CLUB: ${member.sport}"
             )
             cursor.close()
             return member
