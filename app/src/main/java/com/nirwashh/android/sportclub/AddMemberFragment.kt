@@ -8,9 +8,13 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.FragmentActivity
 import com.nirwashh.android.sportclub.data.ClubContentProvider.Companion.CONTENT_URI
 import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_FIRST_NAME
 import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_GENDER
@@ -54,6 +58,7 @@ class AddMemberFragment : BaseFragment() {
         b.btnSave.setOnClickListener {
             //saveMember()
             insertMember()
+            hideKeyboard(requireContext(), b.edGroup)
         }
         b.btnDelete.setOnClickListener {
             val firstName = b.edFirstName.text.toString()
@@ -124,5 +129,10 @@ class AddMemberFragment : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         dbManager.closeDb()
+    }
+
+    fun hideKeyboard(context: Context, view: View) {
+        val imm = context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
