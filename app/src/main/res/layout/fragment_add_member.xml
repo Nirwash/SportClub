@@ -121,12 +121,14 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_save"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="@string/save"
+        android:textSize="20sp"
         android:layout_margin="16dp"/>
 
 
