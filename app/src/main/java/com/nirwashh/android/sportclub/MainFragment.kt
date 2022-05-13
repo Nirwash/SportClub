@@ -41,7 +41,13 @@ class MainFragment : BaseFragment() {
         b.btnAddPerson.setOnClickListener {
             val fragment = AddMemberFragment()
             fm.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("AddMemberFragment").commit()
+
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        displayData()
     }
 
     override fun onDestroyView() {
@@ -52,6 +58,10 @@ class MainFragment : BaseFragment() {
     private fun displayData() {
         val projection = arrayOf(KEY_ID, KEY_FIRST_NAME, KEY_LAST_NAME, KEY_GENDER, KEY_SPORT)
         val cursor: Cursor? = requireActivity().contentResolver.query(CONTENT_URI, projection, null, null, null)
+
+        val members = ""
+        val text = "All members\n\n" +
+                "$KEY_ID $KEY_FIRST_NAME $KEY_LAST_NAME $KEY_GENDER $KEY_SPORT".plus(members)
         with(cursor) {
             while (this?.moveToNext() == true) {
                 val memberID = cursor?.getString(cursor.getColumnIndexOrThrow(KEY_ID))?.toInt()
@@ -59,13 +69,15 @@ class MainFragment : BaseFragment() {
                 val lastName = cursor?.getString(cursor.getColumnIndexOrThrow(KEY_LAST_NAME))
                 val gender = cursor?.getString(cursor.getColumnIndexOrThrow(KEY_GENDER))
                 val sportGroup = cursor?.getString(cursor.getColumnIndexOrThrow(KEY_SPORT))
+                val member = "\n" +
+                        "$memberID $firstName $lastName $gender $sportGroup"
+                members.plus(member)
+
             }
         }
-        val text = "All members\n\n" +
-                "$KEY_ID $KEY_FIRST_NAME $KEY_LAST_NAME $KEY_GENDER $KEY_SPORT"
+        cursor?.close()
 
-        b.tvDisplayData.text = TODO()
-
+        b.tvDisplayData.text = text
 
     }
 
