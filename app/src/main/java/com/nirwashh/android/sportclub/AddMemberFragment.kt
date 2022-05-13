@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
@@ -55,8 +56,10 @@ class AddMemberFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createSpinner()
+
+        unCheckValidInput()
         b.btnSave.setOnClickListener {
-            //saveMember()
+            validInput()
             insertMember()
             hideKeyboard(requireContext(), b.edGroup)
         }
@@ -131,8 +134,33 @@ class AddMemberFragment : BaseFragment() {
         dbManager.closeDb()
     }
 
-    fun hideKeyboard(context: Context, view: View) {
+    private fun hideKeyboard(context: Context, view: View) {
         val imm = context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
+
+    private fun validInput() {
+            val validFirstName = !b.edFirstName.text.isNullOrEmpty()
+            b.tilOne.isErrorEnabled = !validFirstName
+            val errorFirstName = if (validFirstName) "" else getString(R.string.invalid_first_name)
+            b.tilOne.error = errorFirstName
+            val validLastName = !b.edLastName.text.isNullOrEmpty()
+            b.tilTwo.isErrorEnabled = !validLastName
+            val errorLastName = if (validLastName) "" else getString(R.string.invalid_last_name)
+            b.tilTwo.error = errorLastName
+
+    }
+    private fun unCheckValidInput() {
+        b.edFirstName.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun afterTextChanged(s: Editable?) {
+                b.tilOne.isErrorEnabled = false
+            }
+        })
+        b.edLastName.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun afterTextChanged(s: Editable?) {
+                b.tilTwo.isErrorEnabled = false
+            }
+        })
+    }
+
 }

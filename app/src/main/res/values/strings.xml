@@ -5,4 +5,6 @@
     <string name="gender">Gender</string>
     <string name="group">Group</string>
     <string name="save">save</string>
+    <string name="invalid_first_name">Name shouldn\'t be empty</string>
+    <string name="invalid_last_name">Last name shouldn\'t be empty</string>
 </resources>
