@@ -1,11 +1,20 @@
 package com.nirwashh.android.sportclub
 
+import android.database.Cursor
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.nirwashh.android.sportclub.data.ClubContentProvider.Companion.CONTENT_URI
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_FIRST_NAME
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_GENDER
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_ID
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_LAST_NAME
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_SPORT
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.TABLE_NAME
 import com.nirwashh.android.sportclub.databinding.FragmentMainBinding
+import com.nirwashh.android.sportclub.model.Member
 
 class MainFragment : BaseFragment() {
     private var _binding: FragmentMainBinding? = null
@@ -39,4 +48,25 @@ class MainFragment : BaseFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun displayData() {
+        val projection = arrayOf(KEY_ID, KEY_FIRST_NAME, KEY_LAST_NAME, KEY_GENDER, KEY_SPORT)
+        val cursor: Cursor? = requireActivity().contentResolver.query(CONTENT_URI, projection, null, null, null)
+        with(cursor) {
+            while (this?.moveToNext() == true) {
+                val memberID = cursor?.getString(cursor.getColumnIndexOrThrow(KEY_ID))?.toInt()
+                val firstName = cursor?.getString(cursor.getColumnIndexOrThrow(KEY_FIRST_NAME))
+                val lastName = cursor?.getString(cursor.getColumnIndexOrThrow(KEY_LAST_NAME))
+                val gender = cursor?.getString(cursor.getColumnIndexOrThrow(KEY_GENDER))
+                val sportGroup = cursor?.getString(cursor.getColumnIndexOrThrow(KEY_SPORT))
+            }
+        }
+        val text = "All members\n\n" +
+                "$KEY_ID $KEY_FIRST_NAME $KEY_LAST_NAME $KEY_GENDER $KEY_SPORT"
+
+        b.tvDisplayData.text = TODO()
+
+
+    }
+
 }

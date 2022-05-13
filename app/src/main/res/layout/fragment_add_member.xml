@@ -8,7 +8,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_one"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -22,7 +22,7 @@
             android:id="@+id/ed_first_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionNext"
             android:inputType="textCapSentences"
             android:maxLines="1"
             android:hint="@string/first_name"
@@ -32,10 +32,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_two"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:hint="@string/last_name"
         android:textColorHint="@color/black"
         app:layout_constraintTop_toBottomOf="@id/til_one"
@@ -46,10 +46,10 @@
             android:id="@+id/ed_last_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionNext"
+            android:hint="@string/last_name"
             android:inputType="textCapSentences"
             android:maxLines="1"
-            android:hint="@string/last_name"
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -82,7 +82,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_three"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

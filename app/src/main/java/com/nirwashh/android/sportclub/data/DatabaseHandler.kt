@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.SQL_CREATE_ENTRIES
 import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.SQL_DELETE_ENTRIES
 
-class DatabaseHandler(context: Context) : SQLiteOpenHelper(
+class DatabaseHandler(context: Context?) : SQLiteOpenHelper(
     context,
     DATABASE_NAME,
     null,

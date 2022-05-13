@@ -1,5 +1,7 @@
 package com.nirwashh.android.sportclub
 
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
@@ -8,6 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import com.nirwashh.android.sportclub.data.ClubContentProvider.Companion.CONTENT_URI
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_FIRST_NAME
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_GENDER
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_LAST_NAME
+import com.nirwashh.android.sportclub.data.DatabaseContract.DatabaseEntry.KEY_SPORT
 import com.nirwashh.android.sportclub.data.DatabaseManager
 import com.nirwashh.android.sportclub.databinding.FragmentAddMemberBinding
 import com.nirwashh.android.sportclub.model.Member
@@ -44,7 +52,8 @@ class AddMemberFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         createSpinner()
         b.btnSave.setOnClickListener {
-            saveMember()
+            //saveMember()
+            insertMember()
         }
         b.btnDelete.setOnClickListener {
             val firstName = b.edFirstName.text.toString()
@@ -56,11 +65,28 @@ class AddMemberFragment : BaseFragment() {
     }
 
     private fun saveMember() {
-        val firstName = b.edFirstName.text.toString()
-        val lastName = b.edLastName.text.toString()
-        val sportGroup = b.edGroup.text.toString()
+        val firstName = b.edFirstName.text.toString().trim()
+        val lastName = b.edLastName.text.toString().trim()
+        val sportGroup = b.edGroup.text.toString().trim()
         val gender = b.spinner.selectedItem.toString()
         dbManager.addMember(Member(firstName = firstName, lastName = lastName, gender = gender, sport = sportGroup))
+    }
+    private fun insertMember() {
+        val firstName = b.edFirstName.text.toString().trim()
+        val lastName = b.edLastName.text.toString().trim()
+        val sportGroup = b.edGroup.text.toString().trim()
+        val gender = b.spinner.selectedItem.toString()
+        val contentValues = ContentValues()
+        contentValues.put(KEY_FIRST_NAME, firstName)
+        contentValues.put(KEY_LAST_NAME, lastName)
+        contentValues.put(KEY_SPORT, sportGroup)
+        contentValues.put(KEY_GENDER, gender)
+        val uri = requireActivity().contentResolver.insert(CONTENT_URI, contentValues)
+        if (uri == null) {
+            Toast.makeText(context, "Incorrect URI", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Data saved", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun createSpinner() {

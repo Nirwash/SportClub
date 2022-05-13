@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import com.nirwashh.android.sportclub.data.ClubContentProvider.Companion.AUTHORITY
 import com.nirwashh.android.sportclub.data.ClubContentProvider.Companion.PATH_MEMBERS
@@ -22,8 +23,10 @@ private val sUriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
 
 class ClubContentProvider : ContentProvider() {
     private lateinit var dbHelper: DatabaseHandler
-    override fun onCreate() = true
-
+    override fun onCreate(): Boolean {
+        dbHelper = DatabaseHandler(context)
+        return true
+    }
 
     override fun query(
         uri: Uri,
@@ -34,10 +37,10 @@ class ClubContentProvider : ContentProvider() {
     ): Cursor? {
         val db = dbHelper.readableDatabase
         return when (sUriMatcher.match(uri)) {
-            111 -> {
+            MEMBERS -> {
                 db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder)
             }
-            222-> {
+            MEMBERS_ID -> {
                 val _selection = "${KEY_ID}=?"
                 val _selectionArgs = arrayOf(ContentUris.parseId(uri).toString())
                 db.query(TABLE_NAME, projection, _selection, _selectionArgs, null, null, sortOrder)
@@ -54,11 +57,23 @@ class ClubContentProvider : ContentProvider() {
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-//        val db = dbHelper.writableDatabase
-////        return when (sUriMatcher.match(uri)) {
-////
-////        }
-        TODO()
+        val db = dbHelper.writableDatabase
+        when (sUriMatcher.match(uri)) {
+            MEMBERS -> {
+                val id = db.insert(TABLE_NAME, null, values)
+                if (id == -1L) {
+                    Log.e("insertMethod", "Insertion of data in the table failed for $uri")
+                    return null
+                }
+                return ContentUris.withAppendedId(uri, id)
+            }
+            else -> {
+                Toast.makeText(context, "Incorrect URI", Toast.LENGTH_SHORT).show()
+                throw IllegalArgumentException("Can't query incorrect URI $uri")
+            }
+        }
+
+
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
@@ -78,5 +93,7 @@ class ClubContentProvider : ContentProvider() {
         const val SCHEME = "content://"
         const val AUTHORITY = "com.nirwashh.android.sportclub"
         const val PATH_MEMBERS = "members"
+        val BASE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY)
+        val CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_MEMBERS)
     }
 }
